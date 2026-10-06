@@ -28,7 +28,13 @@ class post_reported extends \core\event\base {
         return new \moodle_url('/mod/videoforum/report.php', ['id' => $this->contextinstanceid]);
     }
 
-    protected function get_other_mapping(): array {
-        return ['postid' => ['db' => 'videoforum_post', 'restore' => 'videoforum_post']];
+    public static function get_objectid_mapping() {
+        return ['db' => 'videoforum_report', 'restore' => 'videoforum_report'];
+    }
+
+    public static function get_other_mapping() {
+        return [
+            'postid' => ['db' => 'videoforum_post', 'restore' => 'videoforum_post'],
+        ];
     }
 }

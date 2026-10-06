@@ -26,4 +26,15 @@ class post_created extends \core\event\base {
     public function get_url(): \moodle_url {
         return new \moodle_url('/mod/videoforum/view.php', ['id' => $this->contextinstanceid]);
     }
+
+    public static function get_objectid_mapping() {
+        return ['db' => 'videoforum_post', 'restore' => 'videoforum_post'];
+    }
+
+    public static function get_other_mapping() {
+        return [
+            'parentid' => ['db' => 'videoforum_post', 'restore' => 'videoforum_post'],
+            'rootid' => ['db' => 'videoforum_post', 'restore' => 'videoforum_post'],
+        ];
+    }
 }

@@ -70,7 +70,9 @@ class restore_videoforum_activity_structure_step extends restore_activity_struct
             : 0;
 
         if ($data->postid && $data->userid) {
-            $DB->insert_record('videoforum_report', $data);
+            $oldid = (int)$data->id;
+            $newid = $DB->insert_record('videoforum_report', $data);
+            $this->set_mapping('videoforum_report', $oldid, $newid);
         }
     }
 
