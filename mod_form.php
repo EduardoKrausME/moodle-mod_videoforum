@@ -1,5 +1,26 @@
 <?php
-// This file is part of Moodle - http://moodle.org/.
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Activity settings form for Video Forum.
+ *
+ * @package    mod_videoforum
+ * @copyright  2026 Eduardo Kraus
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -11,6 +32,11 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * @package mod_videoforum
  */
 class mod_videoforum_mod_form extends moodleform_mod {
+    /**
+     * Definition.
+     *
+     * @return void
+     */
     public function definition(): void {
         $mform = $this->_form;
 
@@ -77,6 +103,11 @@ class mod_videoforum_mod_form extends moodleform_mod {
      *
      * @return array
      */
+    /**
+     * Add Completion Rules.
+     *
+     * @return array
+     */
     public function add_completion_rules(): array {
         $mform = $this->_form;
         $fields = $this->completion_fields();
@@ -112,6 +143,12 @@ class mod_videoforum_mod_form extends moodleform_mod {
      * @param array $data Submitted form data.
      * @return bool
      */
+    /**
+     * Completion Rule Enabled.
+     *
+     * @param mixed $data Parameter.
+     * @return bool
+     */
     public function completion_rule_enabled($data): bool {
         foreach ($this->completion_fields() as $formfield) {
             if (!empty($data[$formfield])) {
@@ -126,6 +163,12 @@ class mod_videoforum_mod_form extends moodleform_mod {
      *
      * @param array $defaultvalues Default values.
      */
+    /**
+     * Data Preprocessing.
+     *
+     * @param mixed $defaultvalues Parameter.
+     * @return void
+     */
     public function data_preprocessing(&$defaultvalues): void {
         foreach ($this->completion_fields() as $dbfield => $formfield) {
             if (array_key_exists($dbfield, $defaultvalues)) {
@@ -138,6 +181,11 @@ class mod_videoforum_mod_form extends moodleform_mod {
      * Convert suffixed custom completion form controls back to DB fields.
      *
      * @return stdClass|false
+     */
+    /**
+     * Get Data.
+     *
+     * @return mixed
      */
     public function get_data() {
         $data = parent::get_data();
@@ -160,6 +208,13 @@ class mod_videoforum_mod_form extends moodleform_mod {
      *
      * @param array $data Submitted values.
      * @param array $files Submitted files.
+     * @return array
+     */
+    /**
+     * Validation.
+     *
+     * @param mixed $data Parameter.
+     * @param mixed $files Parameter.
      * @return array
      */
     public function validation($data, $files): array {
@@ -192,6 +247,11 @@ class mod_videoforum_mod_form extends moodleform_mod {
      * Map DB completion fields to collision-safe form control names.
      *
      * @return array<string,string>
+     */
+    /**
+     * Completion Fields.
+     *
+     * @return array
      */
     private function completion_fields(): array {
         return [

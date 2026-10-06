@@ -1,7 +1,27 @@
 <?php
-// This file is part of Moodle - http://moodle.org/.
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * PHPUnit data generator for Video Forum.
+ *
+ * @package    mod_videoforum
+ * @copyright  2026 Eduardo Kraus
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 
 /**
  * Data generator for mod_videoforum.
@@ -9,6 +29,13 @@ defined('MOODLE_INTERNAL') || die();
  * @package mod_videoforum
  */
 class mod_videoforum_generator extends testing_module_generator {
+    /**
+     * Create Instance.
+     *
+     * @param mixed $record Parameter.
+     * @param array|null $options Parameter.
+     * @return mixed
+     */
     public function create_instance($record = null, ?array $options = null) {
         $record = (object)($record ?? []);
         $record->maxduration = $record->maxduration ?? 120;
@@ -29,6 +56,12 @@ class mod_videoforum_generator extends testing_module_generator {
         return parent::create_instance($record, $options);
     }
 
+    /**
+     * Create Post.
+     *
+     * @param mixed $record Parameter.
+     * @return stdClass
+     */
     public function create_post($record): stdClass {
         global $DB;
 

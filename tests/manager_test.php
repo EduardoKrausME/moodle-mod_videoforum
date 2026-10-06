@@ -1,5 +1,26 @@
 <?php
-// This file is part of Moodle - http://moodle.org/.
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Tests for Video Forum domain rules.
+ *
+ * @package    mod_videoforum
+ * @copyright  2026 Eduardo Kraus
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_videoforum;
 
@@ -12,6 +33,11 @@ use mod_videoforum\local\manager;
  * @covers \mod_videoforum\local\manager
  */
 final class manager_test extends \advanced_testcase {
+    /**
+     * Test Counts Topics And Replies.
+     *
+     * @return void
+     */
     public function test_counts_topics_and_replies(): void {
         $this->resetAfterTest();
 
@@ -41,6 +67,11 @@ final class manager_test extends \advanced_testcase {
         );
     }
 
+    /**
+     * Test Post Before View Hides Classmate Reply Until Contribution.
+     *
+     * @return void
+     */
     public function test_post_before_view_hides_classmate_reply_until_contribution(): void {
         $this->resetAfterTest();
 
@@ -82,6 +113,11 @@ final class manager_test extends \advanced_testcase {
         $this->assertTrue(manager::can_view_post($cm, $activity, $reply, (int)$viewer->id));
     }
 
+    /**
+     * Test Reply Limit Is Checked From Canonical Thread.
+     *
+     * @return void
+     */
     public function test_reply_limit_is_checked_from_canonical_thread(): void {
         $this->resetAfterTest();
 
@@ -112,6 +148,11 @@ final class manager_test extends \advanced_testcase {
         manager::assert_can_publish($cm, $activity, (int)$root->id, (int)$user->id);
     }
 
+    /**
+     * Test Separate Group Visibility.
+     *
+     * @return void
+     */
     public function test_separate_group_visibility(): void {
         $this->resetAfterTest();
 

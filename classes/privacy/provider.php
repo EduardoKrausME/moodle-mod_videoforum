@@ -1,5 +1,26 @@
 <?php
-// This file is part of Moodle - http://moodle.org/.
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Privacy API implementation for Video Forum.
+ *
+ * @package    mod_videoforum
+ * @copyright  2026 Eduardo Kraus
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_videoforum\privacy;
 
@@ -21,6 +42,12 @@ class provider implements
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider {
 
+    /**
+     * Get Metadata.
+     *
+     * @param collection $collection Parameter.
+     * @return collection
+     */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table('videoforum_post', [
             'userid' => 'privacy:metadata:post:userid',
@@ -52,6 +79,12 @@ class provider implements
         return $collection;
     }
 
+    /**
+     * Get Contexts For Userid.
+     *
+     * @param int $userid Parameter.
+     * @return contextlist
+     */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
         $base = "FROM {context} ctx
@@ -100,6 +133,12 @@ class provider implements
         return $contextlist;
     }
 
+    /**
+     * Export User Data.
+     *
+     * @param approved_contextlist $contextlist Parameter.
+     * @return void
+     */
     public static function export_user_data(approved_contextlist $contextlist): void {
         global $DB;
 
@@ -189,6 +228,12 @@ class provider implements
         }
     }
 
+    /**
+     * Delete Data For All Users In Context.
+     *
+     * @param context $context Parameter.
+     * @return void
+     */
     public static function delete_data_for_all_users_in_context(context $context): void {
         global $DB;
 
@@ -208,6 +253,12 @@ class provider implements
         $DB->delete_records('videoforum_post', ['videoforumid' => $cm->instance]);
     }
 
+    /**
+     * Delete Data For User.
+     *
+     * @param approved_contextlist $contextlist Parameter.
+     * @return void
+     */
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
         global $CFG, $DB;
 
@@ -274,6 +325,13 @@ class provider implements
      *
      * @param int $activityid Activity id.
      * @param int|null $userid Optional user restriction.
+     */
+    /**
+     * Delete Draft Files.
+     *
+     * @param int $activityid Parameter.
+     * @param int|null $userid Parameter.
+     * @return void
      */
     private static function delete_draft_files(int $activityid, ?int $userid = null): void {
         global $DB;

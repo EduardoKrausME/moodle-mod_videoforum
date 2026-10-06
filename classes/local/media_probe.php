@@ -1,5 +1,26 @@
 <?php
-// This file is part of Moodle - http://moodle.org/.
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Video container metadata helpers.
+ *
+ * @package    mod_videoforum
+ * @copyright  2026 Eduardo Kraus
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_videoforum\local;
 
@@ -12,6 +33,13 @@ namespace mod_videoforum\local;
  * @package mod_videoforum
  */
 class media_probe {
+    /**
+     * Duration.
+     *
+     * @param string $path Parameter.
+     * @param string $mimetype Parameter.
+     * @return float|null
+     */
     public static function duration(string $path, string $mimetype): ?float {
         if ($mimetype === 'video/mp4') {
             return self::mp4_duration($path);
@@ -22,6 +50,12 @@ class media_probe {
         return null;
     }
 
+    /**
+     * Mp4 Duration.
+     *
+     * @param string $path Parameter.
+     * @return float|null
+     */
     private static function mp4_duration(string $path): ?float {
         $handle = @fopen($path, 'rb');
         if (!$handle) {
@@ -67,6 +101,14 @@ class media_probe {
         return null;
     }
 
+    /**
+     * Find Mvhd.
+     *
+     * @param mixed $handle Parameter.
+     * @param int $start Parameter.
+     * @param int $length Parameter.
+     * @return float|null
+     */
     private static function find_mvhd($handle, int $start, int $length): ?float {
         $offset = $start;
         $end = $start + $length;
@@ -107,6 +149,12 @@ class media_probe {
         return null;
     }
 
+    /**
+     * Webm Duration.
+     *
+     * @param string $path Parameter.
+     * @return float|null
+     */
     private static function webm_duration(string $path): ?float {
         $data = @file_get_contents($path, false, null, 0, 2 * 1024 * 1024);
         if ($data === false || $data === '') {
@@ -149,6 +197,13 @@ class media_probe {
 
     /**
      * Read an EBML variable-size integer and advance cursor.
+     */
+    /**
+     * Read Ebml Size.
+     *
+     * @param string $data Parameter.
+     * @param int $cursor Parameter.
+     * @return int|null
      */
     private static function read_ebml_size(string $data, int &$cursor): ?int {
         if ($cursor >= strlen($data)) {

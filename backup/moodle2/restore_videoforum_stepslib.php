@@ -1,7 +1,27 @@
 <?php
-// This file is part of Moodle - http://moodle.org/.
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * Video Forum restore structure step.
+ *
+ * @package    mod_videoforum
+ * @copyright  2026 Eduardo Kraus
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 
 /**
  * Video Forum restore structure.
@@ -12,6 +32,11 @@ class restore_videoforum_activity_structure_step extends restore_activity_struct
     /** @var array<int,array{parentid:int,rootid:int}> */
     private array $postlinks = [];
 
+    /**
+     * Define Structure.
+     *
+     * @return array
+     */
     protected function define_structure(): array {
         $paths = [
             new restore_path_element('videoforum', '/activity/videoforum'),
@@ -26,6 +51,12 @@ class restore_videoforum_activity_structure_step extends restore_activity_struct
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * Process Videoforum.
+     *
+     * @param mixed $data Parameter.
+     * @return void
+     */
     protected function process_videoforum($data): void {
         global $DB;
 
@@ -35,6 +66,12 @@ class restore_videoforum_activity_structure_step extends restore_activity_struct
         $this->apply_activity_instance($newid);
     }
 
+    /**
+     * Process Videoforum Post.
+     *
+     * @param mixed $data Parameter.
+     * @return void
+     */
     protected function process_videoforum_post($data): void {
         global $DB;
 
@@ -58,6 +95,12 @@ class restore_videoforum_activity_structure_step extends restore_activity_struct
         $this->postlinks[$newid] = ['parentid' => $oldparentid, 'rootid' => $oldrootid];
     }
 
+    /**
+     * Process Videoforum Report.
+     *
+     * @param mixed $data Parameter.
+     * @return void
+     */
     protected function process_videoforum_report($data): void {
         global $DB;
 
@@ -76,6 +119,12 @@ class restore_videoforum_activity_structure_step extends restore_activity_struct
         }
     }
 
+    /**
+     * Process Videoforum View.
+     *
+     * @param mixed $data Parameter.
+     * @return void
+     */
     protected function process_videoforum_view($data): void {
         global $DB;
 
@@ -89,6 +138,11 @@ class restore_videoforum_activity_structure_step extends restore_activity_struct
         }
     }
 
+    /**
+     * After Execute.
+     *
+     * @return void
+     */
     protected function after_execute(): void {
         global $DB;
 

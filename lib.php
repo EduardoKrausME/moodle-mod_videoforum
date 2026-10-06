@@ -1,14 +1,35 @@
 <?php
-// This file is part of Moodle - http://moodle.org/.
-
-use mod_videoforum\local\manager;
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Core callbacks for Video Forum.
  *
- * @package mod_videoforum
+ * @package    mod_videoforum
+ * @copyright  2026 Eduardo Kraus
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_videoforum\local\manager;
+
+/**
+ * Supports.
+ *
+ * @param mixed $feature Parameter.
+ * @return mixed
+ */
 function videoforum_supports($feature) {
     switch ($feature) {
         case FEATURE_MOD_ARCHETYPE:
@@ -27,6 +48,13 @@ function videoforum_supports($feature) {
     }
 }
 
+/**
+ * Add Instance.
+ *
+ * @param stdClass $data Parameter.
+ * @param mod_videoforum_mod_form|null $mform Parameter.
+ * @return int
+ */
 function videoforum_add_instance(stdClass $data, ?mod_videoforum_mod_form $mform = null): int {
     global $DB;
 
@@ -38,6 +66,13 @@ function videoforum_add_instance(stdClass $data, ?mod_videoforum_mod_form $mform
     return (int)$data->id;
 }
 
+/**
+ * Update Instance.
+ *
+ * @param stdClass $data Parameter.
+ * @param mod_videoforum_mod_form|null $mform Parameter.
+ * @return bool
+ */
 function videoforum_update_instance(stdClass $data, ?mod_videoforum_mod_form $mform = null): bool {
     global $DB;
 
@@ -50,6 +85,12 @@ function videoforum_update_instance(stdClass $data, ?mod_videoforum_mod_form $mf
     return $result;
 }
 
+/**
+ * Delete Instance.
+ *
+ * @param int $id Parameter.
+ * @return bool
+ */
 function videoforum_delete_instance(int $id): bool {
     global $DB;
 
@@ -76,6 +117,13 @@ function videoforum_delete_instance(int $id): bool {
     return true;
 }
 
+/**
+ * Grade Item Update.
+ *
+ * @param stdClass $activity Parameter.
+ * @param array|null $grades Parameter.
+ * @return int
+ */
 function videoforum_grade_item_update(stdClass $activity, ?array $grades = null): int {
     global $CFG;
     require_once($CFG->libdir . '/gradelib.php');
@@ -100,6 +148,14 @@ function videoforum_grade_item_update(stdClass $activity, ?array $grades = null)
     );
 }
 
+/**
+ * Update Grades.
+ *
+ * @param stdClass $activity Parameter.
+ * @param int $userid Parameter.
+ * @param bool $nullifnone Parameter.
+ * @return void
+ */
 function videoforum_update_grades(stdClass $activity, int $userid = 0, bool $nullifnone = true): void {
     global $DB;
 
@@ -141,6 +197,12 @@ function videoforum_update_grades(stdClass $activity, int $userid = 0, bool $nul
     videoforum_grade_item_update($activity, $grades);
 }
 
+/**
+ * Grade Item Delete.
+ *
+ * @param stdClass $activity Parameter.
+ * @return int
+ */
 function videoforum_grade_item_delete(stdClass $activity): int {
     global $CFG;
     require_once($CFG->libdir . '/gradelib.php');
@@ -157,6 +219,12 @@ function videoforum_grade_item_delete(stdClass $activity): int {
     );
 }
 
+/**
+ * Get Coursemodule Info.
+ *
+ * @param stdClass $cm Parameter.
+ * @return cached_cm_info|null
+ */
 function videoforum_get_coursemodule_info(stdClass $cm): ?cached_cm_info {
     global $DB;
 
@@ -180,6 +248,12 @@ function videoforum_get_coursemodule_info(stdClass $cm): ?cached_cm_info {
     return $info;
 }
 
+/**
+ * Get Completion Active Rule Descriptions.
+ *
+ * @param cached_cm_info $cm Parameter.
+ * @return array
+ */
 function videoforum_get_completion_active_rule_descriptions(cached_cm_info $cm): array {
     if ((int)$cm->completion !== COMPLETION_TRACKING_AUTOMATIC) {
         return [];
@@ -198,6 +272,18 @@ function videoforum_get_completion_active_rule_descriptions(cached_cm_info $cm):
     return $descriptions;
 }
 
+/**
+ * Pluginfile.
+ *
+ * @param mixed $course Parameter.
+ * @param mixed $cm Parameter.
+ * @param mixed $context Parameter.
+ * @param string $filearea Parameter.
+ * @param array $args Parameter.
+ * @param bool $forcedownload Parameter.
+ * @param array $options Parameter.
+ * @return void
+ */
 function videoforum_pluginfile(
     $course,
     $cm,
@@ -244,15 +330,33 @@ function videoforum_pluginfile(
     send_stored_file($file, 0, 0, false, $options);
 }
 
+/**
+ * Reset Course Form Definition.
+ *
+ * @param mixed $mform Parameter.
+ * @return void
+ */
 function videoforum_reset_course_form_definition(&$mform): void {
     $mform->addElement('header', 'videoforumheader', get_string('modulenameplural', 'videoforum'));
     $mform->addElement('advcheckbox', 'reset_videoforum', get_string('resetvideoforum', 'videoforum'));
 }
 
+/**
+ * Reset Course Form Defaults.
+ *
+ * @param mixed $course Parameter.
+ * @return array
+ */
 function videoforum_reset_course_form_defaults($course): array {
     return ['reset_videoforum' => 1];
 }
 
+/**
+ * Reset Userdata.
+ *
+ * @param mixed $data Parameter.
+ * @return array
+ */
 function videoforum_reset_userdata($data): array {
     global $CFG, $DB;
 
@@ -307,6 +411,13 @@ function videoforum_reset_userdata($data): array {
     ]];
 }
 
+/**
+ * Extend Settings Navigation.
+ *
+ * @param settings_navigation $settings Parameter.
+ * @param navigation_node $node Parameter.
+ * @return void
+ */
 function videoforum_extend_settings_navigation(settings_navigation $settings, navigation_node $node): void {
     global $PAGE;
 
