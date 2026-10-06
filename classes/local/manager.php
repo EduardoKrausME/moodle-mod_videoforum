@@ -69,6 +69,17 @@ class manager {
         if (!empty($post->hidden) && !$moderator) {
             return false;
         }
+
+        if ((int)$post->rootid > 0) {
+            $root = $DB->get_record('videoforum_post', [
+                'id' => (int)$post->rootid,
+                'videoforumid' => (int)$activity->id,
+            ]);
+            if (!$root || !empty($root->deleted) || (!empty($root->hidden) && !$moderator)) {
+                return false;
+            }
+        }
+
         if (!self::can_access_group($cm, (int)$post->groupid, $userid)) {
             return false;
         }
