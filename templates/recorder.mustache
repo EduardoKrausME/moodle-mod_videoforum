@@ -1,0 +1,50 @@
+<div class="videoforum-recorder"
+     data-maxduration="{{maxduration}}"
+     data-parentid="{{parentid}}"
+     data-allowupload="{{#allowupload}}1{{/allowupload}}{{^allowupload}}0{{/allowupload}}"
+     data-allowrecording="{{#allowrecording}}1{{/allowrecording}}{{^allowrecording}}0{{/allowrecording}}">
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            <label class="form-label">{{#str}}title, videoforum{{/str}}</label>
+            <input class="form-control" type="text" maxlength="120" data-field="title">
+        </div>
+        <div class="col-12 col-md-6">
+            <label class="form-label">{{#str}}description, videoforum{{/str}}</label>
+            <input class="form-control" type="text" maxlength="500" data-field="description">
+        </div>
+    </div>
+
+    <input type="hidden" value="{{parentid}}" data-field="parentid">
+
+    <div class="videoforum-recorder-stage mt-3">
+        <video class="videoforum-preview" playsinline controls data-role="preview"></video>
+        <div class="videoforum-counter" data-role="counter">00:00 / {{maxduration}}s</div>
+    </div>
+
+    <div class="videoforum-recorder-actions mt-3">
+        {{#allowrecording}}
+            <button type="button" class="btn btn-danger" data-action="record">
+                {{#str}}record, videoforum{{/str}}
+            </button>
+            <button type="button" class="btn btn-outline-secondary d-none" data-action="stop">
+                {{#str}}stop, videoforum{{/str}}
+            </button>
+        {{/allowrecording}}
+
+        {{#allowupload}}
+            <label class="btn btn-outline-secondary mb-0">
+                {{#str}}choosevideo, videoforum{{/str}}
+                <input class="visually-hidden" type="file" accept="video/mp4,video/webm" data-field="file">
+            </label>
+        {{/allowupload}}
+
+        <button type="button" class="btn btn-outline-secondary" data-action="cancel">
+            {{#str}}cancel, videoforum{{/str}}
+        </button>
+        <button type="button" class="btn btn-primary" data-action="publish" disabled>
+            {{#str}}publish, videoforum{{/str}}
+        </button>
+    </div>
+
+    <p class="small text-muted mt-2">{{#str}}recordingpermission, videoforum{{/str}}</p>
+</div>

@@ -1,0 +1,74 @@
+<article class="videoforum-post card mb-4{{#hidden}} videoforum-post-hidden{{/hidden}}" data-postid="{{id}}">
+    <div class="card-body">
+        <header class="videoforum-post-header">
+            <div class="videoforum-author">
+                {{{avatar}}}
+                <div>
+                    <strong>{{author}}</strong>
+                    <div class="text-muted small">{{date}} · {{duration}}</div>
+                </div>
+            </div>
+            {{#hidden}}
+                <span class="badge bg-warning text-dark">{{#str}}hiddenpost, videoforum{{/str}}</span>
+            {{/hidden}}
+        </header>
+
+        {{#title}}<h4 class="videoforum-post-title">{{title}}</h4>{{/title}}
+        {{#description}}<div class="videoforum-post-description">{{{description}}}</div>{{/description}}
+
+        {{#videourl}}
+            <video class="videoforum-video" controls playsinline preload="metadata"
+                   src="{{videourl}}" data-postid="{{id}}"></video>
+        {{/videourl}}
+
+        <footer class="videoforum-actions">
+            {{#isroot}}
+                <a class="btn btn-sm btn-primary" href="{{threadurl}}">{{replylabel}}</a>
+            {{/isroot}}
+            {{#canreply}}
+                <button class="btn btn-sm btn-outline-primary" type="button"
+                        data-action="reply" data-postid="{{id}}">
+                    {{#str}}reply, videoforum{{/str}}
+                </button>
+            {{/canreply}}
+            {{#canreport}}
+                <button class="btn btn-sm btn-outline-secondary" type="button"
+                        data-action="report" data-postid="{{id}}">
+                    {{#str}}report, videoforum{{/str}}
+                </button>
+            {{/canreport}}
+            {{#canmoderate}}
+                {{^hidden}}
+                    <button class="btn btn-sm btn-outline-secondary" type="button"
+                            data-action="moderate" data-moderation="hide" data-postid="{{id}}">
+                        {{#str}}hide, videoforum{{/str}}
+                    </button>
+                {{/hidden}}
+                {{#hidden}}
+                    <button class="btn btn-sm btn-outline-secondary" type="button"
+                            data-action="moderate" data-moderation="restore" data-postid="{{id}}">
+                        {{#str}}restore, videoforum{{/str}}
+                    </button>
+                {{/hidden}}
+                <button class="btn btn-sm btn-outline-danger" type="button"
+                        data-action="moderate" data-moderation="delete" data-postid="{{id}}">
+                    {{#str}}delete, videoforum{{/str}}
+                </button>
+                {{#isroot}}
+                    {{^locked}}
+                        <button class="btn btn-sm btn-outline-secondary" type="button"
+                                data-action="moderate" data-moderation="lock" data-postid="{{id}}">
+                            {{#str}}lock, videoforum{{/str}}
+                        </button>
+                    {{/locked}}
+                    {{#locked}}
+                        <button class="btn btn-sm btn-outline-secondary" type="button"
+                                data-action="moderate" data-moderation="unlock" data-postid="{{id}}">
+                            {{#str}}unlock, videoforum{{/str}}
+                        </button>
+                    {{/locked}}
+                {{/isroot}}
+            {{/canmoderate}}
+        </footer>
+    </div>
+</article>

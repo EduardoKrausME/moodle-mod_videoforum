@@ -1,0 +1,24 @@
+<div class="videoforum-app" data-cmid="{{cmid}}">
+    {{#canviewreport}}
+        <div class="videoforum-report-link mb-3">
+            <a class="btn btn-outline-secondary btn-sm" href="{{reporturl}}">{{#str}}reportactivity, videoforum{{/str}}</a>
+        </div>
+    {{/canviewreport}}
+
+    {{#cancreate}}
+        <section class="videoforum-create mb-4" aria-labelledby="videoforum-create-title">
+            <h3 id="videoforum-create-title">{{#str}}newtopic, videoforum{{/str}}</h3>
+            {{> mod_videoforum/recorder }}
+        </section>
+    {{/cancreate}}
+
+    <div class="videoforum-feed" role="feed">
+        {{#posts}}
+            {{> mod_videoforum/post }}
+        {{/posts}}
+    </div>
+
+    {{^hasposts}}
+        <div class="alert alert-info">{{#str}}noposts, videoforum{{/str}}</div>
+    {{/hasposts}}
+</div>

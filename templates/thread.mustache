@@ -1,0 +1,21 @@
+<div class="videoforum-app videoforum-thread" data-cmid="{{cmid}}">
+    {{#locked}}
+        <div class="alert alert-warning">{{#str}}locked, videoforum{{/str}}</div>
+    {{/locked}}
+    {{#blockedreplies}}
+        <div class="alert alert-info">{{#str}}mustpostbeforeview, videoforum{{/str}}</div>
+    {{/blockedreplies}}
+
+    <div class="videoforum-feed" role="feed">
+        {{#posts}}
+            {{> mod_videoforum/post }}
+        {{/posts}}
+    </div>
+
+    {{#canreply}}
+        <section class="videoforum-create mt-4" aria-labelledby="videoforum-reply-title">
+            <h3 id="videoforum-reply-title">{{#str}}reply, videoforum{{/str}}</h3>
+            {{> mod_videoforum/recorder }}
+        </section>
+    {{/canreply}}
+</div>
