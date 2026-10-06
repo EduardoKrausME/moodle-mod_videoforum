@@ -266,6 +266,9 @@ function videoforum_reset_userdata($data): array {
     }
 
     require_once($CFG->libdir . '/gradelib.php');
+    $completion = new completion_info(get_course($data->courseid));
+    $modinfo = get_fast_modinfo($data->courseid);
+
     foreach ($activities as $activity) {
         $cm = get_coursemodule_from_instance('videoforum', $activity->id, $data->courseid, false, IGNORE_MISSING);
         if ($cm) {
@@ -291,6 +294,10 @@ function videoforum_reset_userdata($data): array {
             null,
             ['reset' => true]
         );
+
+        if ($cm && isset($modinfo->cms[$cm->id])) {
+            $completion->reset_all_state($modinfo->get_cm($cm->id));
+        }
     }
 
     return [[
