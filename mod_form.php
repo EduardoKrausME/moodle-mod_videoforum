@@ -37,8 +37,18 @@ class mod_videoforum_mod_form extends moodleform_mod {
         $mform->setDefault('maxreplies', 0);
         $mform->addHelpButton('maxreplies', 'maxreplies', 'videoforum');
 
-        $mform->addElement('date_time_selector', 'topicdeadline', get_string('topicdeadline', 'videoforum'), ['optional' => true]);
-        $mform->addElement('date_time_selector', 'replydeadline', get_string('replydeadline', 'videoforum'), ['optional' => true]);
+        $mform->addElement(
+            'date_time_selector',
+            'topicdeadline',
+            get_string('topicdeadline', 'videoforum'),
+            ['optional' => true]
+        );
+        $mform->addElement(
+            'date_time_selector',
+            'replydeadline',
+            get_string('replydeadline', 'videoforum'),
+            ['optional' => true]
+        );
 
         $mform->addElement('advcheckbox', 'postbeforeview', get_string('postbeforeview', 'videoforum'));
         $mform->setDefault('postbeforeview', 0);
@@ -62,35 +72,96 @@ class mod_videoforum_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
+    /**
+     * Add custom completion rules.
+     *
+     * @return array
+     */
     public function add_completion_rules(): array {
         $mform = $this->_form;
+        $fields = $this->completion_fields();
 
-        $mform->addElement('text', 'completiontopics', get_string('completiontopics', 'videoforum'), ['size' => 8]);
-        $mform->setType('completiontopics', PARAM_INT);
-        $mform->setDefault('completiontopics', 0);
-
-        $mform->addElement('text', 'completionreplies', get_string('completionreplies', 'videoforum'), ['size' => 8]);
-        $mform->setType('completionreplies', PARAM_INT);
-        $mform->setDefault('completionreplies', 0);
+        $mform->addElement('text', $fields['completiontopics'], get_string('completiontopics', 'videoforum'), ['size' => 8]);
+        $mform->setType($fields['completiontopics'], PARAM_INT);
+        $mform->setDefault($fields['completiontopics'], 0);
 
         $mform->addElement(
             'text',
-            'completionparticipations',
+            $fields['completionreplies'],
+            get_string('completionreplies', 'videoforum'),
+            ['size' => 8]
+        );
+        $mform->setType($fields['completionreplies'], PARAM_INT);
+        $mform->setDefault($fields['completionreplies'], 0);
+
+        $mform->addElement(
+            'text',
+            $fields['completionparticipations'],
             get_string('completionparticipations', 'videoforum'),
             ['size' => 8]
         );
-        $mform->setType('completionparticipations', PARAM_INT);
-        $mform->setDefault('completionparticipations', 0);
+        $mform->setType($fields['completionparticipations'], PARAM_INT);
+        $mform->setDefault($fields['completionparticipations'], 0);
 
-        return ['completiontopics', 'completionreplies', 'completionparticipations'];
+        return array_values($fields);
     }
 
+    /**
+     * Whether any custom completion rule is enabled.
+     *
+     * @param array $data Submitted form data.
+     * @return bool
+     */
     public function completion_rule_enabled($data): bool {
-        return !empty($data['completiontopics'])
-            || !empty($data['completionreplies'])
-            || !empty($data['completionparticipations']);
+        foreach ($this->completion_fields() as $formfield) {
+            if (!empty($data[$formfield])) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    /**
+     * Prepare persisted completion values for the suffixed form controls.
+     *
+     * @param array $defaultvalues Default values.
+     */
+    public function data_preprocessing(&$defaultvalues): void {
+        foreach ($this->completion_fields() as $dbfield => $formfield) {
+            if (array_key_exists($dbfield, $defaultvalues)) {
+                $defaultvalues[$formfield] = $defaultvalues[$dbfield];
+            }
+        }
+    }
+
+    /**
+     * Convert suffixed custom completion form controls back to DB fields.
+     *
+     * @return stdClass|false
+     */
+    public function get_data() {
+        $data = parent::get_data();
+        if (!$data) {
+            return $data;
+        }
+
+        foreach ($this->completion_fields() as $dbfield => $formfield) {
+            if (property_exists($data, $formfield)) {
+                $data->{$dbfield} = (int)$data->{$formfield};
+                unset($data->{$formfield});
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Validate activity data.
+     *
+     * @param array $data Submitted values.
+     * @param array $files Submitted files.
+     * @return array
+     */
     public function validation($data, $files): array {
         $errors = parent::validation($data, $files);
 
@@ -107,11 +178,26 @@ class mod_videoforum_mod_form extends moodleform_mod {
         if ((int)($data['gradetarget'] ?? 0) < 1) {
             $errors['gradetarget'] = get_string('invaliddata', 'error');
         }
-        foreach (['completiontopics', 'completionreplies', 'completionparticipations'] as $field) {
-            if ((int)($data[$field] ?? 0) < 0) {
-                $errors[$field] = get_string('invaliddata', 'error');
+
+        foreach ($this->completion_fields() as $formfield) {
+            if ((int)($data[$formfield] ?? 0) < 0) {
+                $errors[$formfield] = get_string('invaliddata', 'error');
             }
         }
+
         return $errors;
+    }
+
+    /**
+     * Map DB completion fields to collision-safe form control names.
+     *
+     * @return array<string,string>
+     */
+    private function completion_fields(): array {
+        return [
+            'completiontopics' => 'completiontopics_videoforum',
+            'completionreplies' => 'completionreplies_videoforum',
+            'completionparticipations' => 'completionparticipations_videoforum',
+        ];
     }
 }
