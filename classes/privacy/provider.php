@@ -5,6 +5,7 @@ namespace mod_videoforum\privacy;
 
 use context;
 use context_module;
+use context_user;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
@@ -32,6 +33,7 @@ class provider implements
             'userid' => 'privacy:metadata:report:userid',
             'reason' => 'privacy:metadata:report:reason',
             'details' => 'privacy:metadata:report:details',
+            'reviewedby' => 'privacy:metadata:report:reviewedby',
         ], 'privacy:metadata:report');
 
         $collection->add_database_table('videoforum_view', [
@@ -39,6 +41,13 @@ class provider implements
             'lastposition' => 'privacy:metadata:view:lastposition',
             'completed' => 'privacy:metadata:view:completed',
         ], 'privacy:metadata:view');
+
+        $collection->add_database_table('videoforum_draft', [
+            'userid' => 'privacy:metadata:draft:userid',
+            'filename' => 'privacy:metadata:draft:filename',
+            'mimetype' => 'privacy:metadata:draft:mimetype',
+            'duration' => 'privacy:metadata:draft:duration',
+        ], 'privacy:metadata:draft');
 
         return $collection;
     }
@@ -59,6 +68,7 @@ class provider implements
             ['table' => 'videoforum_post', 'alias' => 'p'],
             ['table' => 'videoforum_report', 'alias' => 'r'],
             ['table' => 'videoforum_view', 'alias' => 'w'],
+            ['table' => 'videoforum_draft', 'alias' => 'd'],
         ] as $source) {
             $contextlist->add_from_sql(
                 "SELECT ctx.id
@@ -73,6 +83,19 @@ class provider implements
                 ]
             );
         }
+
+        $contextlist->add_from_sql(
+            "SELECT ctx.id
+               {$base}
+               JOIN {videoforum_report} r
+                 ON r.videoforumid = v.id
+                AND r.reviewedby = :userid",
+            [
+                'contextlevel' => CONTEXT_MODULE,
+                'modname' => 'videoforum',
+                'userid' => $userid,
+            ]
+        );
 
         return $contextlist;
     }
@@ -125,6 +148,18 @@ class provider implements
                 ], array_values($reports)),
             ]);
 
+            $reviews = $DB->get_records('videoforum_report', [
+                'videoforumid' => $cm->instance,
+                'reviewedby' => $userid,
+            ]);
+            writer::with_context($context)->export_data(['moderationreviews'], (object)[
+                'items' => array_map(static fn($report): array => [
+                    'postid' => (int)$report->postid,
+                    'status' => (int)$report->status,
+                    'timereviewed' => transform::datetime((int)$report->timereviewed),
+                ], array_values($reviews)),
+            ]);
+
             $views = $DB->get_records('videoforum_view', [
                 'videoforumid' => $cm->instance,
                 'userid' => $userid,
@@ -136,6 +171,20 @@ class provider implements
                     'completed' => (bool)$view->completed,
                     'timemodified' => transform::datetime((int)$view->timemodified),
                 ], array_values($views)),
+            ]);
+
+            $drafts = $DB->get_records('videoforum_draft', [
+                'videoforumid' => $cm->instance,
+                'userid' => $userid,
+            ]);
+            writer::with_context($context)->export_data(['drafts'], (object)[
+                'items' => array_map(static fn($draft): array => [
+                    'filename' => $draft->filename,
+                    'mimetype' => $draft->mimetype,
+                    'duration' => (float)$draft->duration,
+                    'parentid' => (int)$draft->parentid,
+                    'timecreated' => transform::datetime((int)$draft->timecreated),
+                ], array_values($drafts)),
             ]);
         }
     }
@@ -151,6 +200,7 @@ class provider implements
             return;
         }
 
+        self::delete_draft_files((int)$cm->instance);
         get_file_storage()->delete_area_files($context->id, 'mod_videoforum', 'postvideo');
         $DB->delete_records('videoforum_view', ['videoforumid' => $cm->instance]);
         $DB->delete_records('videoforum_report', ['videoforumid' => $cm->instance]);
@@ -159,9 +209,11 @@ class provider implements
     }
 
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
-        global $DB;
+        global $CFG, $DB;
 
         $userid = (int)$contextlist->get_user()->id;
+        require_once($CFG->dirroot . '/mod/videoforum/lib.php');
+
         foreach ($contextlist->get_contexts() as $context) {
             if (!$context instanceof context_module) {
                 continue;
@@ -170,6 +222,7 @@ class provider implements
             if (!$cm) {
                 continue;
             }
+            $activity = $DB->get_record('videoforum', ['id' => $cm->instance], '*', MUST_EXIST);
 
             $posts = $DB->get_records('videoforum_post', [
                 'videoforumid' => $cm->instance,
@@ -182,6 +235,7 @@ class provider implements
                     'postvideo',
                     $post->id
                 );
+                $post->userid = 0;
                 $post->title = '';
                 $post->description = '';
                 $post->hidden = 1;
@@ -190,10 +244,18 @@ class provider implements
                 $DB->update_record('videoforum_post', $post);
             }
 
+            self::delete_draft_files((int)$cm->instance, $userid);
             $DB->delete_records('videoforum_report', [
                 'videoforumid' => $cm->instance,
                 'userid' => $userid,
             ]);
+            $DB->set_field_select(
+                'videoforum_report',
+                'reviewedby',
+                0,
+                'videoforumid = :activityid AND reviewedby = :userid',
+                ['activityid' => $cm->instance, 'userid' => $userid]
+            );
             $DB->delete_records('videoforum_view', [
                 'videoforumid' => $cm->instance,
                 'userid' => $userid,
@@ -202,6 +264,37 @@ class provider implements
                 'videoforumid' => $cm->instance,
                 'userid' => $userid,
             ]);
+
+            \videoforum_update_grades($activity, $userid, true);
+        }
+    }
+
+    /**
+     * Delete user draft files owned by this activity's server-side draft bindings.
+     *
+     * @param int $activityid Activity id.
+     * @param int|null $userid Optional user restriction.
+     */
+    private static function delete_draft_files(int $activityid, ?int $userid = null): void {
+        global $DB;
+
+        $conditions = ['videoforumid' => $activityid];
+        if ($userid !== null) {
+            $conditions['userid'] = $userid;
+        }
+
+        $drafts = $DB->get_records('videoforum_draft', $conditions);
+        $fs = get_file_storage();
+        foreach ($drafts as $draft) {
+            $usercontext = context_user::instance((int)$draft->userid, IGNORE_MISSING);
+            if ($usercontext) {
+                $fs->delete_area_files(
+                    $usercontext->id,
+                    'user',
+                    'draft',
+                    (int)$draft->draftitemid
+                );
+            }
         }
     }
 }

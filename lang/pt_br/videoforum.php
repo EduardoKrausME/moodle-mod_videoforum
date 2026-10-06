@@ -107,3 +107,10 @@ $string['privacy:metadata:view'] = 'Progresso de visualização dos vídeos.';
 $string['privacy:metadata:view:userid'] = 'Usuário que assistiu.';
 $string['privacy:metadata:view:lastposition'] = 'Última posição válida recebida.';
 $string['privacy:metadata:view:completed'] = 'Se a reprodução chegou ao final.';
+
+$string['privacy:metadata:draft'] = 'Vínculos temporários de upload do Video Forum.';
+$string['privacy:metadata:draft:userid'] = 'Usuário que enviou o vídeo temporário.';
+$string['privacy:metadata:draft:filename'] = 'Nome do arquivo de vídeo temporário.';
+$string['privacy:metadata:draft:mimetype'] = 'Tipo MIME detectado do vídeo temporário.';
+$string['privacy:metadata:draft:duration'] = 'Duração detectada ou declarada do vídeo temporário.';
+$string['privacy:metadata:report:reviewedby'] = 'Usuário que revisou a denúncia.';

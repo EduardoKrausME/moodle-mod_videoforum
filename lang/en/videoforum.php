@@ -107,3 +107,10 @@ $string['videoforum:reply'] = 'Reply in Video Forum';
 $string['videoforum:reportpost'] = 'Report Video Forum publications';
 $string['videoforum:moderate'] = 'Moderate Video Forum publications';
 $string['videoforum:viewreport'] = 'View Video Forum reports';
+
+$string['privacy:metadata:draft'] = 'Temporary Video Forum upload bindings.';
+$string['privacy:metadata:draft:userid'] = 'The user who uploaded the draft video.';
+$string['privacy:metadata:draft:filename'] = 'The draft video filename.';
+$string['privacy:metadata:draft:mimetype'] = 'The detected draft video MIME type.';
+$string['privacy:metadata:draft:duration'] = 'The detected or declared draft video duration.';
+$string['privacy:metadata:report:reviewedby'] = 'The user who reviewed the report.';
