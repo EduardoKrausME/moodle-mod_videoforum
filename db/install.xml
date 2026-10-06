@@ -6,50 +6,49 @@
     <TABLE NAME="videoforum" COMMENT="Video Forum activity instances">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true"/>
-        <FIELD NAME="intro" TYPE="text" NOTNULL="false"/>
-        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="maxduration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="120"/>
-        <FIELD NAME="allowtopics" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
-        <FIELD NAME="allowreplies" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
-        <FIELD NAME="maxreplies" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="topicdeadline" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="replydeadline" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="postbeforeview" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="allowupload" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
-        <FIELD NAME="allowrecording" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
-        <FIELD NAME="gradetarget" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1"/>
-        <FIELD NAME="completiontopics" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="completionreplies" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="completionparticipations" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="grade" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="maxduration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="120" SEQUENCE="false"/>
+        <FIELD NAME="allowtopics" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="allowreplies" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="maxreplies" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="topicdeadline" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="replydeadline" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="postbeforeview" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="allowupload" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="allowrecording" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="gradetarget" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="completiontopics" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="completionreplies" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="completionparticipations" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="grade" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="coursefk" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
       </KEYS>
-      <INDEXES>      </INDEXES>
     </TABLE>
 
     <TABLE NAME="videoforum_post" COMMENT="Video topics and replies">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="videoforumid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="parentid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="rootid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="title" TYPE="char" LENGTH="120" NOTNULL="true"/>
-        <FIELD NAME="description" TYPE="text" NOTNULL="false"/>
-        <FIELD NAME="duration" TYPE="number" LENGTH="10" DECIMALS="3" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="hidden" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="locked" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="videoforumid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="parentid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="rootid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="120" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="duration" TYPE="number" LENGTH="10" DECIMALS="3" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="hidden" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="locked" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -66,14 +65,14 @@
     <TABLE NAME="videoforum_draft" COMMENT="Server-side binding for uploaded draft videos">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="videoforumid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="draftitemid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="parentid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="filename" TYPE="char" LENGTH="255" NOTNULL="true"/>
-        <FIELD NAME="mimetype" TYPE="char" LENGTH="100" NOTNULL="true"/>
-        <FIELD NAME="duration" TYPE="number" LENGTH="10" DECIMALS="3" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="videoforumid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="draftitemid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="parentid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="filename" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="mimetype" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="duration" TYPE="number" LENGTH="10" DECIMALS="3" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -89,15 +88,15 @@
     <TABLE NAME="videoforum_report" COMMENT="Participant reports about publications">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="videoforumid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="postid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="reason" TYPE="char" LENGTH="50" NOTNULL="true" DEFAULT="other"/>
-        <FIELD NAME="details" TYPE="text" NOTNULL="false"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="reviewedby" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timereviewed" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="videoforumid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="postid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="reason" TYPE="char" LENGTH="50" NOTNULL="true" DEFAULT="other" SEQUENCE="false"/>
+        <FIELD NAME="details" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="reviewedby" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timereviewed" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -114,13 +113,13 @@
     <TABLE NAME="videoforum_view" COMMENT="Per-user video viewing state">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="videoforumid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="postid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="lastposition" TYPE="number" LENGTH="10" DECIMALS="3" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="completed" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="videoforumid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="postid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="lastposition" TYPE="number" LENGTH="10" DECIMALS="3" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="completed" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
