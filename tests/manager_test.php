@@ -118,6 +118,8 @@ final class manager_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $userone = $this->getDataGenerator()->create_user();
         $usertwo = $this->getDataGenerator()->create_user();
+        $this->getDataGenerator()->enrol_user($userone->id, $course->id);
+        $this->getDataGenerator()->enrol_user($usertwo->id, $course->id);
         $group = $this->getDataGenerator()->create_group(['courseid' => $course->id]);
         $this->getDataGenerator()->create_group_member(['groupid' => $group->id, 'userid' => $userone->id]);
 

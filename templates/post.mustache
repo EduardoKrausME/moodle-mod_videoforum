@@ -18,12 +18,12 @@
 
         {{#videourl}}
             <video class="videoforum-video" controls playsinline preload="metadata"
-                   src="{{videourl}}" data-postid="{{id}}"></video>
+                   src="{{{videourl}}}" data-postid="{{id}}"></video>
         {{/videourl}}
 
         <footer class="videoforum-actions">
             {{#isroot}}
-                <a class="btn btn-sm btn-primary" href="{{threadurl}}">{{replylabel}}</a>
+                <a class="btn btn-sm btn-primary" href="{{{threadurl}}}">{{replylabel}}</a>
             {{/isroot}}
             {{#canreply}}
                 <button class="btn btn-sm btn-outline-primary" type="button"

@@ -31,9 +31,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="coursefk" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
       </KEYS>
-      <INDEXES>
-        <INDEX NAME="courseidx" UNIQUE="false" FIELDS="course"/>
-      </INDEXES>
+      <INDEXES>      </INDEXES>
     </TABLE>
 
     <TABLE NAME="videoforum_post" COMMENT="Video topics and replies">
@@ -62,9 +60,7 @@
       <INDEXES>
         <INDEX NAME="activityrootidx" UNIQUE="false" FIELDS="videoforumid,rootid"/>
         <INDEX NAME="activityuseridx" UNIQUE="false" FIELDS="videoforumid,userid"/>
-        <INDEX NAME="parentidx" UNIQUE="false" FIELDS="parentid"/>
-        <INDEX NAME="groupidx" UNIQUE="false" FIELDS="groupid"/>
-      </INDEXES>
+        <INDEX NAME="parentidx" UNIQUE="false" FIELDS="parentid"/>      </INDEXES>
     </TABLE>
 
     <TABLE NAME="videoforum_draft" COMMENT="Server-side binding for uploaded draft videos">
