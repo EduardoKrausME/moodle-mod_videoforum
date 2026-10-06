@@ -29,21 +29,6 @@ class mod_videoforum_generator extends testing_module_generator {
         return parent::create_instance($record, $options);
     }
 
-    public function get_createable_entities(): array {
-        return [
-            'posts' => [
-                'singular' => 'post',
-                'datagenerator' => 'post',
-                'required' => ['videoforum', 'user'],
-                'switchids' => [
-                    'videoforum' => 'videoforumid',
-                    'user' => 'userid',
-                    'group' => 'groupid',
-                ],
-            ],
-        ];
-    }
-
     public function create_post($record): stdClass {
         global $DB;
 
