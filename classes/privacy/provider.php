@@ -329,11 +329,11 @@ class provider implements
         require_once($CFG->dirroot . '/mod/videoforum/lib.php');
 
             if (!$context instanceof context_module) {
-                continue;
+                return;
             }
             $cm = get_coursemodule_from_id('videoforum', $context->instanceid, 0, false, IGNORE_MISSING);
             if (!$cm) {
-                continue;
+                return;
             }
             $activity = $DB->get_record('videoforum', ['id' => $cm->instance], '*', MUST_EXIST);
 
