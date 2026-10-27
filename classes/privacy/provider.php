@@ -29,6 +29,8 @@ use context_module;
 use context_user;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
+use core_privacy\local\request\userlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\writer;
@@ -40,7 +42,8 @@ use core_privacy\local\request\writer;
  */
 class provider implements
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider {
+    \core_privacy\local\request\plugin\provider,
+    \core_privacy\local\request\core_userlist_provider {
 
     /**
      * Get Metadata.
@@ -131,6 +134,50 @@ class provider implements
         );
 
         return $contextlist;
+    }
+
+
+    /**
+     * Find users with personal data in the module context.
+     *
+     * @param userlist $userlist List being populated.
+     */
+    public static function get_users_in_context(userlist $userlist): void {
+        $context = $userlist->get_context();
+        if (!$context instanceof context_module) {
+            return;
+        }
+        $cm = get_coursemodule_from_id('videoforum', $context->instanceid, 0, false, IGNORE_MISSING);
+        if (!$cm) {
+            return;
+        }
+
+        foreach (['videoforum_post', 'videoforum_report', 'videoforum_view', 'videoforum_draft'] as $table) {
+            $userlist->add_from_sql(
+                "SELECT userid FROM {{$table}} WHERE videoforumid = :activityid AND userid > 0",
+                ['activityid' => $cm->instance]
+            );
+        }
+        $userlist->add_from_sql(
+            "SELECT reviewedby AS userid FROM {videoforum_report}
+              WHERE videoforumid = :activityid AND reviewedby > 0",
+            ['activityid' => $cm->instance]
+        );
+    }
+
+    /**
+     * Erase personal data for the approved users in one activity context.
+     *
+     * @param approved_userlist $userlist Approved users.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist): void {
+        $context = $userlist->get_context();
+        if (!$context instanceof context_module) {
+            return;
+        }
+        foreach ($userlist->get_userids() as $userid) {
+            self::delete_user_data_in_context($context, (int)$userid);
+        }
     }
 
     /**
@@ -266,6 +313,21 @@ class provider implements
         require_once($CFG->dirroot . '/mod/videoforum/lib.php');
 
         foreach ($contextlist->get_contexts() as $context) {
+            self::delete_user_data_in_context($context, $userid);
+        }
+    }
+
+    /**
+     * Delete a single user's personal data within one module context.
+     *
+     * @param context $context Context.
+     * @param int $userid User ID.
+     */
+    private static function delete_user_data_in_context(context $context, int $userid): void {
+        global $CFG, $DB;
+
+        require_once($CFG->dirroot . '/mod/videoforum/lib.php');
+
             if (!$context instanceof context_module) {
                 continue;
             }
@@ -317,7 +379,6 @@ class provider implements
             ]);
 
             \videoforum_update_grades($activity, $userid, true);
-        }
     }
 
     /**
