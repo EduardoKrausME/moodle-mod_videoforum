@@ -328,57 +328,57 @@ class provider implements
 
         require_once($CFG->dirroot . '/mod/videoforum/lib.php');
 
-            if (!$context instanceof context_module) {
-                return;
-            }
-            $cm = get_coursemodule_from_id('videoforum', $context->instanceid, 0, false, IGNORE_MISSING);
-            if (!$cm) {
-                return;
-            }
-            $activity = $DB->get_record('videoforum', ['id' => $cm->instance], '*', MUST_EXIST);
+        if (!$context instanceof context_module) {
+            return;
+        }
+        $cm = get_coursemodule_from_id('videoforum', $context->instanceid, 0, false, IGNORE_MISSING);
+        if (!$cm) {
+            return;
+        }
+        $activity = $DB->get_record('videoforum', ['id' => $cm->instance], '*', MUST_EXIST);
 
-            $posts = $DB->get_records('videoforum_post', [
-                'videoforumid' => $cm->instance,
-                'userid' => $userid,
-            ]);
-            foreach ($posts as $post) {
-                get_file_storage()->delete_area_files(
-                    $context->id,
-                    'mod_videoforum',
-                    'postvideo',
-                    $post->id
-                );
-                $post->userid = 0;
-                $post->title = '';
-                $post->description = '';
-                $post->hidden = 1;
-                $post->deleted = 1;
-                $post->timemodified = time();
-                $DB->update_record('videoforum_post', $post);
-            }
-
-            self::delete_draft_files((int)$cm->instance, $userid);
-            $DB->delete_records('videoforum_report', [
-                'videoforumid' => $cm->instance,
-                'userid' => $userid,
-            ]);
-            $DB->set_field_select(
-                'videoforum_report',
-                'reviewedby',
-                0,
-                'videoforumid = :activityid AND reviewedby = :userid',
-                ['activityid' => $cm->instance, 'userid' => $userid]
+        $posts = $DB->get_records('videoforum_post', [
+            'videoforumid' => $cm->instance,
+            'userid' => $userid,
+        ]);
+        foreach ($posts as $post) {
+            get_file_storage()->delete_area_files(
+                $context->id,
+                'mod_videoforum',
+                'postvideo',
+                $post->id
             );
-            $DB->delete_records('videoforum_view', [
-                'videoforumid' => $cm->instance,
-                'userid' => $userid,
-            ]);
-            $DB->delete_records('videoforum_draft', [
-                'videoforumid' => $cm->instance,
-                'userid' => $userid,
-            ]);
+            $post->userid = 0;
+            $post->title = '';
+            $post->description = '';
+            $post->hidden = 1;
+            $post->deleted = 1;
+            $post->timemodified = time();
+            $DB->update_record('videoforum_post', $post);
+        }
 
-            \videoforum_update_grades($activity, $userid, true);
+        self::delete_draft_files((int)$cm->instance, $userid);
+        $DB->delete_records('videoforum_report', [
+            'videoforumid' => $cm->instance,
+            'userid' => $userid,
+        ]);
+        $DB->set_field_select(
+            'videoforum_report',
+            'reviewedby',
+            0,
+            'videoforumid = :activityid AND reviewedby = :userid',
+            ['activityid' => $cm->instance, 'userid' => $userid]
+        );
+        $DB->delete_records('videoforum_view', [
+            'videoforumid' => $cm->instance,
+            'userid' => $userid,
+        ]);
+        $DB->delete_records('videoforum_draft', [
+            'videoforumid' => $cm->instance,
+            'userid' => $userid,
+        ]);
+
+        \videoforum_update_grades($activity, $userid, true);
     }
 
     /**

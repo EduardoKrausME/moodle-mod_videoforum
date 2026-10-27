@@ -35,7 +35,7 @@ $PAGE->set_title(format_string($activity->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
-$event = \\mod_videoforum\\event\\course_module_viewed::create([
+$event = \mod_videoforum\event\course_module_viewed::create([
     'objectid' => $activity->id,
     'context' => $context,
 ]);
