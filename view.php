@@ -35,6 +35,15 @@ $PAGE->set_title(format_string($activity->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
+$event = \\mod_videoforum\\event\\course_module_viewed::create([
+    'objectid' => $activity->id,
+    'context' => $context,
+]);
+$event->add_record_snapshot('course', $course);
+$event->add_record_snapshot('course_modules', $cm);
+$event->add_record_snapshot('videoforum', $activity);
+$event->trigger();
+
 $posts = manager::get_feed($cm, $activity, (int)$USER->id);
 
 $cancreate = has_capability('mod/videoforum:createtopic', $context)
