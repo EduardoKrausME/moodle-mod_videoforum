@@ -2,6 +2,13 @@
 
 This changelog documents only the two most recent published GitHub releases. Each entry contains changes verified against its immediately preceding published release. Changes made later on `master` are excluded.
 
+## 1.0.3 - 2026-10-25
+
+- Converted the video forum feed and recorder JavaScript modules to Moodle AMD `define` format and rebuilt their production assets.
+- Updated the server-side forum manager and release workflow configuration.
+
+**Comparison:** [1.0.2...1.0.3](https://github.com/EduardoKrausME/moodle-mod_videoforum/compare/1.0.2...1.0.3)
+
 ## 1.0.2 - 2026-10-15
 
 ### Changed
